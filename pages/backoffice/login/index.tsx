@@ -1,17 +1,33 @@
+import axios from "axios";
 import { Fragment, useState } from "react";
-import { ParticlesContainer } from "src/components/lib/particle";
- 
+import {  toast } from 'react-toastify';
+import Cookies from "js-cookie";
 
 export default function BackofficeLogin(){
     const [ form, setForm ] = useState({
-        email: '',
+        username: '',
         password: '',
         remember_me: false
     })
+    const [ loadingSubmit, setLoadingSubmit ] = useState(false)
 
-    const SubmitLogin = (e:any) => {
+    const SubmitLogin = async (e:any) => {
         e.preventDefault()
+        console.log('yes')
+        setLoadingSubmit(true)
+        await axios.post('/api/backoffice/login', form)
+            .then(res => {
+                toast.success(res?.data?.msg)
+                if (form.remember_me){
+                    Cookies.set('TOKEN_KEY', res?.data?.token)
+                }
 
+                window.location.href = '/backoffice/dashboard'
+
+            }).catch(err => {
+                toast.error(err?.response?.data?.msg)  
+            })
+        setLoadingSubmit(false)
         
     }
 
@@ -43,8 +59,8 @@ export default function BackofficeLogin(){
                                     <input
                                         type="text"
                                         className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                        placeholder="Email address"
-                                        onChange={({ target }) => setForm({ ...form, email: target.value })}
+                                        placeholder="Username"
+                                        onChange={({ target }) => setForm({ ...form, username: target.value })}
                                     />
                                 </div>
 
