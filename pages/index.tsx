@@ -2,10 +2,41 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import Navbar from 'src/components/navbar'
+import { Fragment, useEffect, useState } from 'react'
+import axios from 'axios'
+import { Card } from 'antd'
+import moment from 'moment'
+import Link from 'next/link'
+import { Loading } from '@nextui-org/react'
+import { RenderShowHTML } from '@base/src/utils/helper/RenderShowHTML'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const [ params, setParams ] = useState({
+    page: 1,
+    limit: 10
+  })
+  const [ totalData, setTotalData ] = useState(0)
+  const [ blog, setBlog ] = useState([])
+  const [ loadingBlog, setLoadingBlog ] = useState(false)
+  
+  useEffect(() => {
+    setLoadingBlog(true)
+    axios.get('/api/backoffice/blog/blog', { params: params })
+        .then(res => {
+            let data = res?.data?.blog
+            setTotalData(res?.data?.total)
+            setBlog(data)
+        }).catch(err => {})
+        .finally(() => {
+            setLoadingBlog(false)
+        })
+},[])
+
+
+
+
   return (
     <>
       <Head>
@@ -17,8 +48,25 @@ export default function Home() {
 
       <Navbar />
 
+
       <div className='container mx-auto'>
-        <p>tes</p>
+        {loadingBlog && <Loading type='points-opacity' className='mt-10' />}
+        <div className="p-2 grid grid-cols-2 mt-10">
+          {blog?.map((item:any, idx:any) => (
+            <Link href={`/blog/detail/${item?.title?.replaceAll(' ', '-')}`}>
+                <Card key={idx} title={
+                    <div className="flex justify-between items-center">
+                          <p className="text-lg font-semibold">{item?.title}</p>
+                          <p className="text-xs">{moment(item?.created_at).format('lll')}</p>
+                    </div>
+                } className='h-max mb-5 w-11/12 cursor-pointer hover:shadow-lg'
+                >
+                  {RenderShowHTML(item?.Content)}
+                    
+                </Card>
+            </Link>
+          ))}
+      </div>
       </div>
 
     </>

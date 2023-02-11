@@ -1,6 +1,8 @@
 import { Navbar, Button, Dropdown } from "@nextui-org/react";
+import { useRouter } from "next/router";
 
 export default function Navbars(){
+    const router = useRouter()
     return (
         <div className="">
             <Navbar css={{
@@ -8,7 +10,7 @@ export default function Navbars(){
                     // $$navbarBlurBackgroundColor: "transparent"
                     }} isBordered variant="sticky">
                 <Navbar.Brand>
-                    <p className="text-lg">DUNIA IT</p>
+                    <p className="text-lg font-bold italic">DUNIA IT</p>
                 </Navbar.Brand>
                 <Navbar.Content
                     enableCursorHighlight
@@ -94,7 +96,7 @@ export default function Navbars(){
                     </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown> */}
-                <Navbar.Link isActive href="#">
+                <Navbar.Link isActive={router.asPath === '/blog'} href="#">
                     Blogs
                 </Navbar.Link>
                 <Navbar.Link href="#">About</Navbar.Link>

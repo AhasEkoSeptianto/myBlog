@@ -17,7 +17,7 @@ export default async function handler(req:any, res:any) {
           if (!user || user.length < 1) {
             return res.status(404).json({msg:'user unknow' , login: false});
           };
-          console.log(process.env.NEXT_PUBLIC_JWTTOKEN)
+          
           const token = jwt.sign(
                 { id: user?.[0]?._id, username: user?.[0]?.username },
                 process.env.NEXT_PUBLIC_JWTTOKEN
