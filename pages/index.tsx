@@ -53,7 +53,7 @@ export default function Home() {
         {loadingBlog && <Loading type='points-opacity' className='mt-10' />}
         <div className="p-2 grid grid-cols-2 mt-10">
           {blog?.map((item:any, idx:any) => (
-            <Link href={`/blog/detail/${item?.title?.replaceAll(' ', '-')}`}>
+            <Link key={idx} href={`/blog/detail/${item?.title?.replaceAll(' ', '-')}`}>
                 <Card key={idx} title={
                     <div className="flex justify-between items-center">
                           <p className="text-lg font-semibold">{item?.title}</p>

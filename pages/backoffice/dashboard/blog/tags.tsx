@@ -82,7 +82,7 @@ export default function Tags(props:any){
         },
         {
             title: 'Action',
-            render: (_, record:any) => {
+            render: (_:any , record:any) => {
                 const id = record?._id
                 const DeleteTag = async () => {
                     await axios.delete('/api/backoffice/blog/tag?_id=' + id)

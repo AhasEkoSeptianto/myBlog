@@ -70,9 +70,9 @@ export const RenderShowHTML = (content:any) => {
         <Fragment>
         {updated?.map((html:any, idx: any) => {
             if (html?.includes('<code>')){
-                // html = html?.substring(0, html?.length-11)?.slice(9);
                 return (
                     <CodeBlock  
+                        key={idx}
                         text={html?.replaceAll(`<p><code>`, '')?.replaceAll('</code></p>', '')}
                         // language='js'
                         // theme={dracula}
@@ -81,7 +81,7 @@ export const RenderShowHTML = (content:any) => {
                     
                 )
             }else{
-                return <div dangerouslySetInnerHTML={{ __html: html }}></div>
+                return <div key={idx} dangerouslySetInnerHTML={{ __html: html }}></div>
             }
         })}
         </Fragment>
